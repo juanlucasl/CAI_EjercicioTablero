@@ -63,7 +63,7 @@ namespace ProyectoTablero.Servicios
         public Tarea TraerTareaMasAntigua()
         {
             IOrderedEnumerable<Tarea> tareasOrdenadas = _tareas.OrderBy((tarea) => tarea.FechaAlta);
-            return tareasOrdenadas.First();
+            return tareasOrdenadas.FirstOrDefault();
         }
 
         /// <summary>Devuelve la prioridad de la tarea menos prioritaria.</summary>

@@ -68,6 +68,21 @@ namespace ProyectoTablero.InterfazConsola
                         break;
                     }
 
+                    case 3: // Ver tarea mas antigua
+                    {
+                        Tarea tareaMasAntigua = tablero.TraerTareaMasAntigua();
+
+                        if (tareaMasAntigua == null)
+                        {
+                            InputHelper.PedirContinuacion("No se encontraron tareas.");
+                            break;
+                        }
+                        Console.WriteLine("Tarea mas antigua:");
+                        Console.WriteLine(tareaMasAntigua);
+                        InputHelper.PedirContinuacion();
+                        break;
+                    }
+
                     case 0: // Salir
                     {
                         Console.WriteLine("Salir del programa");
