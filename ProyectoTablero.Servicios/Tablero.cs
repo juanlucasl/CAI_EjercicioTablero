@@ -29,11 +29,19 @@ namespace ProyectoTablero.Servicios
         /// <summary>Crea una nueva tarea y la agrega al tablero.</summary>
         /// <param name="descripcion">Descripcion de la tarea.</param>
         /// <param name="orden">Orden de la Tarea. Por defecto equivale a la prioridad de ultimo orden.</param>
+        /// <param name="especial">Flag booleano que indica si se debe crear una tarea especial.</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public void AgregarTarea(string descripcion, int orden = 0)
+        public void AgregarTarea(string descripcion, int orden = 0, bool especial = false)
         {
             int ordenTarea = orden <= 0 ? Math.Min(ObtenerMenorPrioridad() + 1, 10000) : orden;
-            _tareas.Add(new Tarea(descripcion, ordenTarea, Interlocked.Increment(ref _codigoContador)));
+            if (especial)
+            {
+                _tareas.Add(new TareaEspecial(descripcion, ordenTarea, Interlocked.Increment(ref _codigoContador)));
+            }
+            else
+            {
+                _tareas.Add(new Tarea(descripcion, ordenTarea, Interlocked.Increment(ref _codigoContador)));
+            }
         }
 
         /// <summary>Cambia el estado de una tarea.</summary>
