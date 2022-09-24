@@ -12,6 +12,7 @@ namespace ProyectoTablero.Servicios
         {
             _titulo = titulo;
             _descripcion = descripcion;
+            _tareas = new List<Tarea>();
             _fechaInicioProyecto = DateTime.Now;
         }
 
@@ -27,10 +28,11 @@ namespace ProyectoTablero.Servicios
 
         /// <summary>Crea una nueva tarea y la agrega al tablero.</summary>
         /// <param name="descripcion">Descripcion de la tarea.</param>
-        /// <param name="orden">Orden de la Tarea. Por defecto equivale a la cantidad de tareas en el tablero (incluyendo a la nueva)</param>
-        public void AgregarTarea(string descripcion, int orden = -1)
+        /// <param name="orden">Orden de la Tarea. Por defecto equivale a la prioridad de ultimo orden.</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public void AgregarTarea(string descripcion, int orden = 0)
         {
-            int ordenTarea = orden < 0 ? _tareas.Count() + 1 : orden;
+            int ordenTarea = orden <= 0 ? Math.Min(ObtenerMenorPrioridad() + 1, 10000) : orden;
             _tareas.Add(new Tarea(descripcion, ordenTarea, Interlocked.Increment(ref _codigoContador)));
         }
 
@@ -44,13 +46,16 @@ namespace ProyectoTablero.Servicios
             _tareas[indiceTarea].FechaRealizacion = DateTime.Now;
         }
 
-        /// <summary>Devuelve todas las tareas con el estado dado. Si no se especifica un estado, devuelve todas las tareas.</summary>
+        /// <summary>
+        /// Devuelve todas las tareas con el estado dado, ordenadas por orden de prioridad.
+        /// Si no se especifica un estado, devuelve todas las tareas.
+        /// </summary>
         /// <param name="estado">Estado a buscar.</param>
-        /// <returns>Lista de tareas.</returns>
-        public IEnumerable<Tarea> TraerTareas(Estado? estado = null)
+        /// <returns>Lista de tareas ordenada por orden de prioridad.</returns>
+        public Tarea[] TraerTareas(Estado? estado = null)
         {
-            if (estado == null) return _tareas;
-            return _tareas.FindAll((tarea) => (tarea.Estado == estado));
+            List<Tarea> tareas = estado == null ? _tareas : _tareas.FindAll((tarea) => (tarea.Estado == estado));
+            return tareas.OrderBy((tarea) => tarea.Orden).ToArray();
         }
         
         /// <summary>Devuelve la tarea mas antigua.</summary>
@@ -59,6 +64,14 @@ namespace ProyectoTablero.Servicios
         {
             IOrderedEnumerable<Tarea> tareasOrdenadas = _tareas.OrderBy((tarea) => tarea.FechaAlta);
             return tareasOrdenadas.First();
+        }
+
+        /// <summary>Devuelve la prioridad de la tarea menos prioritaria.</summary>
+        /// <returns>Prioridad de la tarea menos prioritaria, o 0 si no hay tareas.</returns>
+        private int ObtenerMenorPrioridad()
+        {
+            Tarea tareaMenorPrioridad = _tareas.OrderByDescending((tarea) => tarea.Orden).FirstOrDefault();
+            return tareaMenorPrioridad?.Orden ?? 0;
         }
 
         /// <summary>Devuelve el indice de la tarea correspondiente a un codigo dado.</summary>

@@ -12,7 +12,6 @@ namespace ProyectoTablero.Servicios
             _codigo = codigo;
             _fechaAlta = DateTime.Now;
             _estado = Estado.Nueva;
-
         }
 
         // Atributos
@@ -24,6 +23,11 @@ namespace ProyectoTablero.Servicios
         private Estado _estado;
 
         // Propiedades
+        internal int Orden
+        {
+            get { return _orden; }
+        }
+
         internal int Codigo
         {
             get { return _codigo; }
@@ -45,9 +49,19 @@ namespace ProyectoTablero.Servicios
             set { _estado = value; }
         }
 
-        public bool IsFinalizada
+        private bool IsFinalizada
         {
             get { return _estado == Estado.Finalizada; }
+        }
+
+        // Metodos
+        public override string ToString()
+        {
+            string tareaString = $"=== Tarea #{_codigo}: {_descripcion} ===\n" +
+                                 $"Orden: {_orden}\n" +
+                                 $"Estado: {_estado}";
+            if (IsFinalizada) tareaString += $"\nFecha de finalizacion: {_fechaRealizacion}";
+            return tareaString;
         }
     }
 }
