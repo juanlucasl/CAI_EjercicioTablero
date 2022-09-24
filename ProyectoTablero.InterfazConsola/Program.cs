@@ -13,7 +13,7 @@ namespace ProyectoTablero.InterfazConsola
             do
             {
                 Console.Clear();
-                Console.WriteLine("Agenda:");
+                Console.WriteLine("Tablero:");
                 Console.WriteLine("1- Crear tarea");
                 Console.WriteLine("2- Listar tareas por estado");
                 Console.WriteLine("3- Ver tarea mas antigua");
@@ -37,7 +37,7 @@ namespace ProyectoTablero.InterfazConsola
                             tablero.AgregarTarea(descripcion, orden);
                         }
 
-                        InputHelper.PedirContinuacion("Tarea creada.");
+                        InputHelper.PedirContinuacion($"Tarea '{descripcion}' creada.");
                         break;
                     }
 
@@ -45,7 +45,7 @@ namespace ProyectoTablero.InterfazConsola
                     {
                         Console.WriteLine("Seleccionar estado a listar:");
                         Console.WriteLine("1- Nueva");
-                        Console.WriteLine("2- En progreso");
+                        Console.WriteLine("2- Activa");
                         Console.WriteLine("3- Finalizada");
                         Console.WriteLine("O presionar enter para listar todas.");
 
@@ -80,6 +80,34 @@ namespace ProyectoTablero.InterfazConsola
                         Console.WriteLine("Tarea mas antigua:");
                         Console.WriteLine(tareaMasAntigua);
                         InputHelper.PedirContinuacion();
+                        break;
+                    }
+
+                    case 4: // Actualizar estado de tarea
+                    {
+                        int codigoTarea = InputHelper.PedirNumeroNatural("Ingresar codigo de tarea a actualizar", 1, obligatorio:true);
+                        if (tablero.ObtenerTareaPorCodigo(codigoTarea) == -1)
+                        {
+                            InputHelper.PedirContinuacion($"No se encontro una tarea con el codigo {codigoTarea}.");
+                            break;
+                        }
+
+                        Console.WriteLine("Seleccionar nuevo estado:");
+                        Console.WriteLine("1- Nueva");
+                        Console.WriteLine("2- Activa");
+                        Console.WriteLine("3- Finalizada");
+                        Console.WriteLine("0- Cancelar");
+                        int input = InputHelper.PedirNumeroNatural("", 0, 3, true);
+                        if (input == 0)
+                        {
+                            InputHelper.PedirContinuacion();
+                            break;
+                        };
+
+                        Estado estado = (Estado)(input - 1);
+                        tablero.CambiarEstado(codigoTarea, estado);
+
+                        InputHelper.PedirContinuacion($"Tarea #{codigoTarea} actualizada a {estado}.");
                         break;
                     }
 

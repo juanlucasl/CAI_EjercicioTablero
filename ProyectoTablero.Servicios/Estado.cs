@@ -3,7 +3,7 @@ namespace ProyectoTablero.Servicios
     public enum Estado
     {
         Nueva,
-        EnProgreso,
+        Activa,
         Finalizada
     }
 }

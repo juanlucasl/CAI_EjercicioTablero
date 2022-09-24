@@ -66,20 +66,20 @@ namespace ProyectoTablero.Servicios
             return tareasOrdenadas.FirstOrDefault();
         }
 
+        /// <summary>Devuelve el indice de la tarea correspondiente a un codigo dado.</summary>
+        /// <param name="codigo">Codigo de tarea.</param>
+        /// <returns>Indice de la tarea encontrada o -1.</returns>
+        public int ObtenerTareaPorCodigo(int codigo)
+        {
+            return _tareas.FindIndex((tarea) => (tarea.Codigo == codigo));
+        }
+
         /// <summary>Devuelve la prioridad de la tarea menos prioritaria.</summary>
         /// <returns>Prioridad de la tarea menos prioritaria, o 0 si no hay tareas.</returns>
         private int ObtenerMenorPrioridad()
         {
             Tarea tareaMenorPrioridad = _tareas.OrderByDescending((tarea) => tarea.Orden).FirstOrDefault();
             return tareaMenorPrioridad?.Orden ?? 0;
-        }
-
-        /// <summary>Devuelve el indice de la tarea correspondiente a un codigo dado.</summary>
-        /// <param name="codigo">Codigo de tarea.</param>
-        /// <returns>Indice de la tarea encontrada o -1.</returns>
-        private int ObtenerTareaPorCodigo(int codigo)
-        {
-            return _tareas.FindIndex((tarea) => (tarea.Codigo == codigo));
         }
     }
 }

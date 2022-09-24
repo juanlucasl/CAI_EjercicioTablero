@@ -20,11 +20,15 @@ namespace ProyectoTablero.InterfazConsola
         /// <param name="max" type="int">
         /// Valor maximo para el numero que el usuario puede ingresar (default 2147483647)
         /// </param>
+        /// <param name="obligatorio" type="boolean">
+        /// Flag que indica si se debe rechazar al texto ingresado si esta vacio.
+        /// </param>
         /// <returns type="int">El número que ingresó el usuario, o -1 si el usuario no ingreso datos.</returns>
         public static int PedirNumeroNatural(
             string mensaje = "Ingresar un numero natural",
             int min = 0,
-            int max = Int32.MaxValue
+            int max = Int32.MaxValue,
+            bool obligatorio = false
         )
         {
             int numeroNatural;
@@ -34,7 +38,7 @@ namespace ProyectoTablero.InterfazConsola
 
             while (!int.TryParse(input = Console.ReadLine(), out numeroNatural) || numeroNatural < min || numeroNatural > max)
             {
-                if (string.IsNullOrWhiteSpace(input)) return -1;
+                if (!obligatorio && string.IsNullOrWhiteSpace(input)) return -1;
                 Console.WriteLine("El numero ingresado no es valido. Ingresar un numero distinto:");
             }
 
