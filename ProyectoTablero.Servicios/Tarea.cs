@@ -23,6 +23,11 @@ namespace ProyectoTablero.Servicios
         private Estado _estado;
 
         // Propiedades
+        protected string Descripcion
+        {
+            get { return _descripcion; }
+        }
+
         internal int Orden
         {
             get { return _orden; }
@@ -40,6 +45,7 @@ namespace ProyectoTablero.Servicios
 
         internal DateTime FechaRealizacion
         {
+            get { return _fechaRealizacion; }
             set { _fechaRealizacion = value; }
         }
         
@@ -49,7 +55,7 @@ namespace ProyectoTablero.Servicios
             set { _estado = value; }
         }
 
-        private bool IsFinalizada
+        protected bool IsFinalizada
         {
             get { return _estado == Estado.Finalizada; }
         }

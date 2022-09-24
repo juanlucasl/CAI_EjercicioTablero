@@ -27,14 +27,15 @@ namespace ProyectoTablero.InterfazConsola
                     {
                         string descripcion = InputHelper.PedirString("Ingresar descripcion:", true);
                         int orden = InputHelper.PedirNumeroNatural("Ingresar orden de prioridad (default ultima):", 1, 10000);
+                        bool especial = (InputHelper.PedirNumeroNatural("Es tarea especial? (1: Si, 0: No)", 0, 1)) == 1;
 
                         if (orden <= 0)
                         {
-                            tablero.AgregarTarea(descripcion);
+                            tablero.AgregarTarea(descripcion, especial:especial);
                         }
                         else
                         {
-                            tablero.AgregarTarea(descripcion, orden);
+                            tablero.AgregarTarea(descripcion, orden, especial);
                         }
 
                         InputHelper.PedirContinuacion($"Tarea '{descripcion}' creada.");
@@ -61,7 +62,13 @@ namespace ProyectoTablero.InterfazConsola
 
                         foreach (Tarea tarea in tareas)
                         {
+                            if (tarea.GetType() == typeof(TareaEspecial))
+                            {
+                                TareaEspecial tareaEspecial = (TareaEspecial)tarea;
+                                Console.ForegroundColor = (ConsoleColor)tareaEspecial.Color;
+                            }
                             Console.WriteLine($"{tarea}\n");
+                            Console.ResetColor();
                         }
 
                         InputHelper.PedirContinuacion();
